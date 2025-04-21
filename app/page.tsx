@@ -3,7 +3,7 @@ import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { LineChart, ProgressCircle } from "@/components/charts"
-import { Zap } from "lucide-react"
+import { Zap, X } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
@@ -49,6 +49,11 @@ export default function MainMenu() {
     }
   }
 
+  // Function to delete a task
+  const handleDeleteTask = (taskId: string) => {
+    setTasks(tasks.filter((task) => task.id !== taskId))
+  }
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-7xl mx-auto">
       {/* Trend Chart */}
@@ -60,10 +65,10 @@ export default function MainMenu() {
       </Card>
 
       {/* Daily Quote */}
-      <Card className="bg-[#404457] border-0 shadow-2xl rounded-3xl w-[400px] h-[120px] flex flex-col justify-center">
+      <Card className="bg-[#404457] border-0 shadow-2xl rounded-3xl w-[400px] h-[260px] flex flex-col justify-center">
         <div className="flex flex-col items-center gap-5">
           <h2 className="text-sm font-medium">Daily Quote</h2>
-          <p className="italic text-sm ">"One hour is better than none"</p>
+          <p className="italic text-lg">"One hour is better than none"</p>
         </div>
       </Card>
 
@@ -82,19 +87,29 @@ export default function MainMenu() {
         </form>
         <div className="space-y-3 max-h-[200px] overflow-y-auto">
           {tasks.map((task) => (
-            <div key={task.id} className="flex items-center space-x-3">
-              <Checkbox 
-                id={task.id} 
-                checked={task.completed} 
-                onCheckedChange={() => toggleTask(task.id)}
-                className="border-[#525a81] data-[state=checked]:bg-[#525a81] data-[state=checked]:border-[#525a81]"
-              />
-              <label
-                htmlFor={task.id}
-                className={`text-base ${task.completed ? "line-through text-gray-400" : ""}`}
+            <div key={task.id} className="flex items-center justify-between w-full space-x-3">
+              <div className="flex items-center space-x-3 flex-grow">
+                <Checkbox
+                  id={task.id}
+                  checked={task.completed}
+                  onCheckedChange={() => toggleTask(task.id)}
+                  className="border-[#525a81] data-[state=checked]:bg-[#525a81] data-[state=checked]:border-[#525a81]"
+                />
+                <label
+                  htmlFor={task.id}
+                  className={`text-base ${task.completed ? "line-through text-gray-400" : ""}`}
+                >
+                  {task.label}
+                </label>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="p-0 h-6 w-6 text-gray-400 hover:text-white hover:bg-red-500/20"
+                onClick={() => handleDeleteTask(task.id)}
               >
-                {task.label}
-              </label>
+                <X className="h-4 w-4" />
+              </Button>
             </div>
           ))}
         </div>
@@ -125,7 +140,7 @@ export default function MainMenu() {
       {/* Streak */}
       <Card className="bg-[#404457] border-0 shadow-none rounded-3xl p-6">
         <h2 className="text-2xl font-medium mb-4">Streak</h2>
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-col items-center justify-center gap-4">
           <div className="bg-[#e74c6b] rounded-full p-4">
             <Zap className="h-8 w-8 text-white" />
           </div>

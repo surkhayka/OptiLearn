@@ -5,6 +5,12 @@ import type React from "react"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { BarChart3, CheckCircle, Clock, GraduationCap, PlusCircle, RefreshCw, Target, X } from "lucide-react"
 import { Timer } from "@/components/timer"
 import { useTimer } from "@/context/timer-context"
@@ -13,6 +19,13 @@ export default function StudySession() {
   const { resetPersonalTimer } = useTimer()
   const [goals, setGoals] = useState(["Study for 40 hours this week", "Understand complex numbers"])
   const [newGoal, setNewGoal] = useState("")
+  const [selectedCourse, setSelectedCourse] = useState("MATH1853")
+  const [availableCourses, setAvailableCourses] = useState([
+    "MATH1853",
+    "COMP2511",
+    "PHYS1121",
+    "CHEM1011",
+  ])
 
   const handleAddGoal = () => {
     if (newGoal.trim()) {
@@ -35,7 +48,7 @@ export default function StudySession() {
     <div className="max-w-6xl mx-auto px-4">
       <div className="grid grid-cols-12 gap-6">
         {/* Goals Card */}
-        <Card className="col-span-3 bg-[#404457] border-none rounded-3xl p-6">
+        <Card className="col-span-4 bg-[#404457] border-none rounded-3xl p-6">
           <div className="flex items-center gap-2 mb-4">
             <Target className="h-5 w-5" />
             <h2 className="text-lg font-medium">Goals</h2>
@@ -77,7 +90,7 @@ export default function StudySession() {
         </Card>
 
         {/* Timer Card */}
-        <Card className="col-span-6 bg-[#404457] border-none rounded-3xl p-6">
+        <Card className="col-span-4 bg-[#404457] border-none rounded-3xl p-6">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5" />
@@ -89,7 +102,7 @@ export default function StudySession() {
         </Card>
 
         {/* Stats Card */}
-        <Card className="col-span-3 bg-[#404457] border-none rounded-3xl p-6">
+        <Card className="col-span-4 bg-[#404457] border-none rounded-3xl p-6">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center gap-2">
               <BarChart3 className="h-5 w-5" />
@@ -136,14 +149,33 @@ export default function StudySession() {
         </Card>
 
         {/* Course Card */}
-        <Card className="col-span-12 bg-[#404457] border-none rounded-3xl p-6">
+        <Card className="col-span-4 col-start-5 flex flex-col bg-[#404457] border-none rounded-3xl p-6 h-48">
           <div className="flex items-center gap-2 mb-4">
             <GraduationCap className="h-5 w-5" />
             <h2 className="text-lg font-medium">Course</h2>
           </div>
 
-          <div className="flex justify-center items-center h-20">
-            <h1 className="text-2xl font-bold text-[#ffa601]">MATH1853</h1>
+          <div className="flex flex-grow justify-center items-center">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="text-2xl font-bold text-[#ffa601] p-0 h-auto hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+                >
+                  {selectedCourse}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="center">
+                {availableCourses.map((course) => (
+                  <DropdownMenuItem
+                    key={course}
+                    onSelect={() => setSelectedCourse(course)}
+                  >
+                    {course}
+                  </DropdownMenuItem>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </Card>
       </div>
