@@ -3,7 +3,7 @@ import numpy as np
 import warnings
 import face_recognition
 from scipy.spatial import distance
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 warnings.filterwarnings("ignore")
@@ -14,7 +14,7 @@ app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_methods=["GET"],
+    allow_methods=["*"],
     allow_headers=["*"],
 )
 
@@ -37,6 +37,9 @@ def process_image(frame):
     MOUTH_AR_THRESH = 0.2
     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     face_locations = face_recognition.face_locations(rgb_frame)
+    # if no face is in view, count as distracted
+    if not face_locations:
+        return True, True
     eye_flag = False
     mouth_flag = False
     for face_location in face_locations:
@@ -69,6 +72,10 @@ def get_concentration_rate():
         concentration.append(1)
     rate = (sum(concentration) * 100.0) / len(concentration) if concentration else 0
     return {"concentrationRate": rate}
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
 
 if __name__ == "__main__":
     import uvicorn
