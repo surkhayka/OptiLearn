@@ -22,9 +22,9 @@ export default function StudySession() {
   const [selectedCourse, setSelectedCourse] = useState("MATH1853")
   const [availableCourses, setAvailableCourses] = useState([
     "MATH1853",
-    "COMP2511",
-    "PHYS1121",
-    "CHEM1011",
+    "COMP2121",
+    "CCST9088",
+    "MATH2014",
   ])
 
   const handleAddGoal = () => {
