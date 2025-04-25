@@ -65,9 +65,9 @@ export default function MainMenu() {
       </Card>
 
       {/* Daily Quote */}
-      <Card className="bg-[#404457] border-0 shadow-2xl rounded-3xl w-[400px] h-[260px] flex flex-col justify-center">
+      <Card className="bg-[#404457] border-0 shadow-2xl rounded-3xl h-[260px] flex flex-col justify-center">
         <div className="flex flex-col items-center gap-5">
-          <h2 className="text-sm font-medium">Daily Quote</h2>
+          <h2 className="text-lg font-medium">Daily Quote</h2>
           <p className="italic text-lg">"One hour is better than none"</p>
         </div>
       </Card>
