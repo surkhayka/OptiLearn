@@ -48,24 +48,46 @@ export default function Analytics() {
   }
 
   const getFilteredData = () => {
-    const today = new Date()
-    const filteredData = studyData.filter(entry => {
-      const entryDate = new Date(entry.date)
-      const diffDays = Math.floor((today.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24))
-      
-      switch (timeRange) {
-        case "daily":
-          return diffDays === 0
-        case "weekly":
-          return diffDays <= 7
-        case "monthly":
-          return diffDays <= 30
-        default:
-          return true
-      }
-    })
-    return filteredData
-  }
+  const today = new Date();
+  const filteredData = studyData.filter(entry => {
+    const entryDate = new Date(entry.date);
+    const diffDays = Math.floor((today.getTime() - entryDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    switch (timeRange) {
+      case "daily":
+        return diffDays === 0;
+      case "weekly":
+        return diffDays <= 7;
+      case "monthly":
+        return diffDays <= 30;
+      default:
+        return true;
+    }
+  });
+
+  if (timeRange === "daily") return filteredData;
+
+  const aggregatedData = filteredData.reduce((acc, curr) => {
+    const key = curr.date;
+    if (!acc[key]) acc[key] = { ...curr, count: 1 };
+    else {
+      acc[key].hours += curr.hours;
+      acc[key].count += 1;
+    }
+    return acc;
+  }, {} as Record<string, StudyData & { count: number }>);
+
+  return Object.values(aggregatedData).map(d => ({
+    date: d.date,
+    hours: parseFloat((d.hours / d.count).toFixed(2)),
+    concentration: d.concentration,
+    productivity: d.productivity,
+    breakEfficiency: d.breakEfficiency,
+    focusDuration: d.focusDuration
+  }));
+};
+
+  
 
   const getAverageMetrics = () => {
     const filteredData = getFilteredData()
