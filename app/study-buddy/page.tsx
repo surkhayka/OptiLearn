@@ -5,9 +5,11 @@ import { BarChart3, Clock, RefreshCw } from "lucide-react"
 import { GroupTimer } from "@/components/timer"
 import { useTimer } from "@/context/timer-context"
 import { Button } from "@/components/ui/button"
+import { useConcentration } from "../hooks/useConcentration"
 
 export default function StudyBuddy() {
-  const { resetGroupTimer } = useTimer()
+  const { resetGroupTimer, isGroupRunning } = useTimer()
+  const surkhayRate = useConcentration(isGroupRunning)
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 md:space-y-8">
@@ -39,7 +41,10 @@ export default function StudyBuddy() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
             <div className="text-center">
               <p className="mb-1">
-                Concentration Rate : <span className="text-[#33c75a]">73%</span>
+                Concentration Rate :{' '}
+                <span className="text-[#33c75a]">
+                  {surkhayRate != null ? `${surkhayRate.toFixed(0)}%` : '…'}
+                </span>
               </p>
             </div>
             <div className="md:col-start-3 text-center">

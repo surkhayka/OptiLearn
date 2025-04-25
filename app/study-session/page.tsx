@@ -14,9 +14,11 @@ import {
 import { BarChart3, CheckCircle, Clock, GraduationCap, PlusCircle, RefreshCw, Target, X } from "lucide-react"
 import { Timer } from "@/components/timer"
 import { useTimer } from "@/context/timer-context"
+import { useConcentration } from "../hooks/useConcentration"
 
 export default function StudySession() {
-  const { resetPersonalTimer } = useTimer()
+  const { resetPersonalTimer, isPersonalRunning } = useTimer()
+  const personalRate = useConcentration(isPersonalRunning)
   const [goals, setGoals] = useState(["Study for 40 hours this week", "Understand complex numbers"])
   const [newGoal, setNewGoal] = useState("")
   const [selectedCourse, setSelectedCourse] = useState("MATH1853")
@@ -114,7 +116,10 @@ export default function StudySession() {
           <div className="space-y-4 text-sm">
             <div>
               <p className="mb-1">
-                Concentration Rate : <span className="text-[#ffa601]">73%</span>
+                Concentration Rate :{' '}
+                <span className="text-[#ffa601]">
+                  {personalRate != null ? `${personalRate.toFixed(0)}%` : '…'}
+                </span>
               </p>
             </div>
 
