@@ -36,61 +36,61 @@ export default function StudyBuddy() {
 
         {/* Stats Comparison */}
         <div className="space-y-3 md:space-y-4 text-xs md:text-sm">
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+            <div className="text-center">
               <p className="mb-1">
                 Concentration Rate : <span className="text-[#33c75a]">73%</span>
               </p>
             </div>
-            <div>
+            <div className="md:col-start-3 text-center">
               <p className="mb-1">
                 Concentration Rate : <span className="text-[#33c75a]">79%</span>
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+            <div className="text-center">
               <p className="mb-1">Total Break Time : 35 min</p>
             </div>
-            <div>
+            <div className="md:col-start-3 text-center">
               <p className="mb-1">Total Break Time : 40 min</p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+            <div className="text-center">
               <p className="mb-1">
                 Concentration Streak: <span className="text-[#33c75a]">21 min</span>
               </p>
             </div>
-            <div>
+            <div className="md:col-start-3 text-center">
               <p className="mb-1">
                 Concentration Streak: <span className="text-[#33c75a]">17 min</span>
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+            <div className="text-center">
               <p className="mb-1">
                 Tiredness : <span className="text-[#e3e3e3]">31%</span>
               </p>
             </div>
-            <div>
+            <div className="md:col-start-3 text-center">
               <p className="mb-1">
                 Tiredness : <span className="text-[#e3e3e3]">36%</span>
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
+            <div className="text-center">
               <p className="mb-1">
                 Distraction Rate : <span className="text-[#e3e3e3]">27%</span>
               </p>
             </div>
-            <div>
+            <div className="md:col-start-3 text-center">
               <p className="mb-1">
                 Distraction Rate : <span className="text-[#e3e3e3]">21%</span>
               </p>
