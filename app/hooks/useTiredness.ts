@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 
-export function useConcentration(enabled: boolean, intervalMs = 1000) {
+export function useTiredness(enabled: boolean, intervalMs = 1000) {
   const [rate, setRate] = useState<number | null>(null);
 
-  console.log("API URL is", process.env.NEXT_PUBLIC_API_URL);
+  console.log("Tiredness API URL is", process.env.NEXT_PUBLIC_API_URL);
 
   useEffect(() => {
     let id: NodeJS.Timeout;
@@ -13,11 +13,11 @@ export function useConcentration(enabled: boolean, intervalMs = 1000) {
     }
     const fetchRate = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/rate`);
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/tiredness`);
         const json = await res.json();
-        setRate(json.concentrationRate);
+        setRate(json.tirednessRate);
       } catch (err) {
-        console.error("Failed to fetch concentration rate", err);
+        console.error("Failed to fetch tiredness rate", err);
       }
     };
     fetchRate();

@@ -15,10 +15,12 @@ import { BarChart3, CheckCircle, Clock, GraduationCap, PlusCircle, RefreshCw, Ta
 import { Timer } from "@/components/timer"
 import { useTimer } from "@/context/timer-context"
 import { useConcentration } from "../hooks/useConcentration"
+import { useTiredness } from "../hooks/useTiredness"
 
 export default function StudySession() {
   const { resetPersonalTimer, isPersonalRunning } = useTimer()
   const personalRate = useConcentration(isPersonalRunning)
+  const tirednessRate = useTiredness(isPersonalRunning)
   const [goals, setGoals] = useState(["Study for 40 hours this week", "Understand complex numbers"])
   const [newGoal, setNewGoal] = useState("")
   const [selectedCourse, setSelectedCourse] = useState("MATH1853")
@@ -145,7 +147,20 @@ export default function StudySession() {
 
             <div>
               <p className="mb-1">
-                Tiredness : <span className="text-[#33c75a]">10%</span>
+                Tiredness :{' '}
+                <span
+                  className={
+                    tirednessRate != null
+                      ? tirednessRate < 25
+                        ? 'text-green-500'
+                        : tirednessRate < 50
+                          ? 'text-yellow-500'
+                          : 'text-red-500'
+                      : 'text-gray-500'
+                  }
+                >
+                  {tirednessRate != null ? `${tirednessRate.toFixed(0)}%` : '…'}
+                </span>
               </p>
             </div>
 

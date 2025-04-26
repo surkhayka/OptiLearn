@@ -6,10 +6,12 @@ import { GroupTimer } from "@/components/timer"
 import { useTimer } from "@/context/timer-context"
 import { Button } from "@/components/ui/button"
 import { useConcentration } from "../hooks/useConcentration"
+import { useTiredness } from "../hooks/useTiredness"
 
 export default function StudyBuddy() {
   const { resetGroupTimer, isGroupRunning } = useTimer()
   const surkhayRate = useConcentration(isGroupRunning)
+  const tirednessRate = useTiredness(isGroupRunning)
 
   return (
     <div className="max-w-6xl mx-auto space-y-4 md:space-y-8">
@@ -100,12 +102,36 @@ export default function StudyBuddy() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
             <div className="text-center">
               <p className="mb-1">
-                Tiredness : <span className="text-[#e3e3e3]">31%</span>
+                Tiredness :{' '}
+                <span
+                  className={
+                    tirednessRate != null
+                      ? tirednessRate < 25
+                        ? 'text-green-500'
+                        : tirednessRate < 50
+                          ? 'text-yellow-500'
+                          : 'text-red-500'
+                      : 'text-gray-500'
+                  }
+                >
+                  {tirednessRate != null ? `${tirednessRate.toFixed(0)}%` : '…'}
+                </span>
               </p>
             </div>
             <div className="md:col-start-3 text-center">
               <p className="mb-1">
-                Tiredness : <span className="text-[#e3e3e3]">36%</span>
+                Tiredness :{' '}
+                <span
+                  className={
+                    36 < 25
+                      ? 'text-green-500'
+                      : 36 < 50
+                        ? 'text-yellow-500'
+                        : 'text-red-500'
+                  }
+                >
+                  36%
+                </span>
               </p>
             </div>
           </div>
