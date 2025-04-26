@@ -51,7 +51,7 @@ export function LineChart() {
       ctx.fillText(i.toString(), padding - 5, y + 3)
     }
 
-    // Draw data points and lines
+    // Draw connected data points
     ctx.strokeStyle = "#33c75a"
     ctx.lineWidth = 2
     ctx.beginPath()
@@ -65,6 +65,14 @@ export function LineChart() {
       } else {
         ctx.lineTo(x, y)
       }
+    })
+
+    ctx.stroke()
+
+    // Draw data points and labels
+    data.forEach((value, index) => {
+      const x = padding + (index / (data.length - 1)) * chartWidth
+      const y = padding + chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight
 
       // Draw point
       ctx.fillStyle = "#33c75a"
@@ -78,8 +86,6 @@ export function LineChart() {
       ctx.textAlign = "center"
       ctx.fillText(labels[index], x, padding + chartHeight + 15)
     })
-
-    ctx.stroke()
   }, [])
 
   return <canvas ref={canvasRef} className="w-full h-full" />
