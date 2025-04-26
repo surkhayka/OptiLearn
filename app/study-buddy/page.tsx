@@ -42,14 +42,35 @@ export default function StudyBuddy() {
             <div className="text-center">
               <p className="mb-1">
                 Concentration Rate :{' '}
-                <span className="text-[#33c75a]">
+                <span
+                  className={
+                    surkhayRate != null
+                      ? surkhayRate < 50
+                        ? 'text-red-500'
+                        : surkhayRate < 75
+                          ? 'text-yellow-500'
+                          : 'text-green-500'
+                      : 'text-gray-500'
+                  }
+                >
                   {surkhayRate != null ? `${surkhayRate.toFixed(0)}%` : '…'}
                 </span>
               </p>
             </div>
             <div className="md:col-start-3 text-center">
               <p className="mb-1">
-                Concentration Rate : <span className="text-[#33c75a]">79%</span>
+                Concentration Rate :{' '}
+                <span
+                  className={
+                    79 < 50
+                      ? 'text-red-500'
+                      : 79 < 75
+                        ? 'text-yellow-500'
+                        : 'text-green-500'
+                  }
+                >
+                  79%
+                </span>
               </p>
             </div>
           </div>
@@ -92,12 +113,36 @@ export default function StudyBuddy() {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4">
             <div className="text-center">
               <p className="mb-1">
-                Distraction Rate : <span className="text-[#e3e3e3]">27%</span>
+                Distraction Rate :{' '}
+                <span
+                  className={
+                    surkhayRate != null
+                      ? (100 - surkhayRate) < 25
+                        ? 'text-green-500'
+                        : (100 - surkhayRate) < 50
+                          ? 'text-yellow-500'
+                          : 'text-red-500'
+                      : 'text-gray-500'
+                  }
+                >
+                  {surkhayRate != null ? `${(100 - surkhayRate).toFixed(0)}%` : '…'}
+                </span>
               </p>
             </div>
             <div className="md:col-start-3 text-center">
               <p className="mb-1">
-                Distraction Rate : <span className="text-[#e3e3e3]">21%</span>
+                Distraction Rate :{' '}
+                <span
+                  className={
+                    (100 - 79) < 25
+                      ? 'text-green-500'
+                      : (100 - 79) < 50
+                        ? 'text-yellow-500'
+                        : 'text-red-500'
+                  }
+                >
+                  {`${(100 - 79).toFixed(0)}%`}
+                </span>
               </p>
             </div>
           </div>

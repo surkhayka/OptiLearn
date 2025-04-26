@@ -117,7 +117,17 @@ export default function StudySession() {
             <div>
               <p className="mb-1">
                 Concentration Rate :{' '}
-                <span className="text-[#ffa601]">
+                <span
+                  className={
+                    personalRate != null
+                      ? personalRate < 50
+                        ? 'text-red-500'
+                        : personalRate < 75
+                          ? 'text-yellow-500'
+                          : 'text-green-500'
+                      : 'text-gray-500'
+                  }
+                >
                   {personalRate != null ? `${personalRate.toFixed(0)}%` : '…'}
                 </span>
               </p>
@@ -141,7 +151,20 @@ export default function StudySession() {
 
             <div>
               <p className="mb-1">
-                Distraction Rate : <span className="text-[#ffa601]">27%</span>
+                Distraction Rate :{' '}
+                <span
+                  className={
+                    personalRate != null
+                      ? (100 - personalRate) < 25
+                        ? 'text-green-500'
+                        : (100 - personalRate) < 50
+                          ? 'text-yellow-500'
+                          : 'text-red-500'
+                      : 'text-gray-500'
+                  }
+                >
+                  {personalRate != null ? `${(100 - personalRate).toFixed(0)}%` : '…'}
+                </span>
               </p>
             </div>
 
