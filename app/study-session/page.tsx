@@ -46,6 +46,10 @@ export default function StudySession() {
         : null
       const newHistory = [...sessionHistory, { date, rate: personalRate, tiredness: avgTiredness }]
       setSessionHistory(newHistory)
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('sessionHistory', JSON.stringify(newHistory));
+        window.dispatchEvent(new Event('sessionHistoryUpdated'));
+      }
       tirednessSamplesRef.current = []
     }
     prevRunningRef.current = isPersonalRunning;

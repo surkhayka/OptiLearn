@@ -18,8 +18,13 @@ client = OpenAI(
   api_key = "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"
 )
 
-# prepare user message with real session JSON
-session_json = json.dumps(data)
+# Extract session data if present
+if isinstance(data, dict) and "session" in data:
+    session_data = data["session"]
+else:
+    session_data = data
+
+session_json = json.dumps(session_data)
 user_message = (
     f"Here is the collected session data in JSON form:\n{session_json}\n\n"
     "Please provide personalized recommendations as plain text bullet lists under two headings:\n"
