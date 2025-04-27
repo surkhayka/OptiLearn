@@ -152,7 +152,7 @@ export default function StudySession() {
               <BarChart3 className="h-5 w-5" />
               <h2 className="text-lg font-medium">Study stats</h2>
             </div>
-            <div className="text-xs">This week</div>
+            <div className="text-xs">This session</div>
           </div>
 
           <div className="space-y-4 text-sm">
