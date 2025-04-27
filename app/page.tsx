@@ -16,6 +16,7 @@ interface Task {
 export default function MainMenu() {
   const [tasks, setTasks] = useState<Task[]>([])
   const [newTask, setNewTask] = useState("")
+  const [trendData, setTrendData] = useState<{ date: string; value: number }[]>([])
 
   useEffect(() => {
     if (typeof window === "undefined") return
@@ -35,6 +36,23 @@ export default function MainMenu() {
       localStorage.setItem("tasks", JSON.stringify(tasks))
     }
   }, [tasks])
+
+  useEffect(() => {
+    if (typeof window === "undefined") return
+    const stored = localStorage.getItem("sessionHistory")
+    if (stored) {
+      try {
+        const sessions = JSON.parse(stored) as { date: string; rate: number | null }[]
+        const data = sessions.map(s => {
+          const [yyyy, mm, dd] = s.date.split('T')[0].split('-');
+          return { date: `${dd}/${mm}/${yyyy.slice(2)}`, value: s.rate ?? 0 };
+        })
+        setTrendData(data)
+      } catch (err) {
+        console.error("Failed to parse sessionHistory", err)
+      }
+    }
+  }, [])
 
   const toggleTask = (taskId: string) => {
     setTasks(tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t))
@@ -58,7 +76,11 @@ export default function MainMenu() {
       <Card className="bg-[#404457] border-0 shadow-none rounded-3xl p-6 md:col-span-2">
         <h2 className="text-2xl font-medium mb-4">Trend</h2>
         <div className="h-40">
-          <LineChart data={[]} />
+          {trendData.length > 0 ? (
+            <LineChart data={trendData} />
+          ) : (
+            <p className="text-gray-400 text-center">No trend data available.</p>
+          )}
         </div>
       </Card>
 

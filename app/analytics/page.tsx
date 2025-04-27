@@ -310,10 +310,10 @@ export default function Analytics() {
           <div className="h-64">
             <FocusPieChart
               data={[
-                { label: "Studying", value: 60, color: "#66bb6a" },
-                { label: "Browsing", value: 32, color: "#ffd54f" },
-                { label: "Mobile phone", value: 3, color: "#455a64" },
-                { label: "Other", value: 5, color: "#b0bec5" }
+                { label: "Studying", value: 60, color: "#33c75a" },
+                { label: "Browsing", value: 32, color: "#00e0ff" },
+                { label: "Mobile phone", value: 3, color: "#ffa601" },
+                { label: "Other", value: 5, color: "#e91e63" }
               ]}
             />
           </div>
