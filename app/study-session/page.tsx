@@ -1,5 +1,5 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect, useRef } from "react"
 import type React from "react"
 
 import { Card } from "@/components/ui/card"
@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { BarChart3, CheckCircle, Clock, GraduationCap, PlusCircle, RefreshCw, Target, X } from "lucide-react"
+import { BarChart3, CheckCircle, Clock, GraduationCap, PlusCircle, Target, X } from "lucide-react"
 import { Timer } from "@/components/timer"
 import { useTimer } from "@/context/timer-context"
 import { useConcentration } from "../hooks/useConcentration"
@@ -21,6 +21,42 @@ export default function StudySession() {
   const { resetPersonalTimer, isPersonalRunning } = useTimer()
   const personalRate = useConcentration(isPersonalRunning)
   const tirednessRate = useTiredness(isPersonalRunning)
+  // Store past sessions (rate + tiredness) when timer stops
+  const [sessionHistory, setSessionHistory] = useState<{ date: string; rate: number | null; tiredness: number | null }[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('sessionHistory')
+      return saved ? JSON.parse(saved) : []
+    }
+    return []
+  });
+  const prevRunningRef = useRef<boolean>(false);
+  const tirednessSamplesRef = useRef<number[]>([]);
+  useEffect(() => {
+    if (isPersonalRunning && tirednessRate != null) {
+      tirednessSamplesRef.current.push(tirednessRate)
+    }
+  }, [isPersonalRunning, tirednessRate])
+  useEffect(() => {
+    if (prevRunningRef.current && !isPersonalRunning) {
+      // session ended — compute average tiredness and record data
+      const date = new Date().toISOString()
+      const samples = tirednessSamplesRef.current
+      const avgTiredness = samples.length > 0
+        ? samples.reduce((sum, v) => sum + v, 0) / samples.length
+        : null
+      const newHistory = [...sessionHistory, { date, rate: personalRate, tiredness: avgTiredness }]
+      setSessionHistory(newHistory)
+      tirednessSamplesRef.current = []
+    }
+    prevRunningRef.current = isPersonalRunning;
+  }, [isPersonalRunning, personalRate, tirednessRate]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('sessionHistory', JSON.stringify(sessionHistory));
+      window.dispatchEvent(new Event('sessionHistoryUpdated'))
+    }
+  }, [sessionHistory]);
+
   const [goals, setGoals] = useState(["Study for 40 hours this week", "Understand complex numbers"])
   const [newGoal, setNewGoal] = useState("")
   const [selectedCourse, setSelectedCourse] = useState("MATH1853")

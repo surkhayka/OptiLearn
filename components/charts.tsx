@@ -2,7 +2,15 @@
 
 import { useEffect, useRef } from "react"
 
-export function LineChart() {
+interface LineChartProps {
+  data?: { date: string; value: number }[]
+}
+
+export function LineChart({ data = [] }: LineChartProps) {
+  if (data.length === 0) {
+    return <div>Loading chart…</div>
+  }
+
   const canvasRef = useRef<HTMLCanvasElement>(null)
 
   useEffect(() => {
@@ -17,12 +25,12 @@ export function LineChart() {
     canvas.height = canvas.offsetHeight
 
     // Data points (Apr 10-16)
-    const data = [3.8, 5.0, 2.0, 3.5, 6.2, 6.2, 1.0]
-    const labels = ["Apr 10", "Apr 11", "Apr 12", "Apr 13", "Apr 14", "Apr 15", "Apr 16"]
+    const labels = data.map(item => item.date)
+    const values = data.map(item => item.value)
 
     // Calculate max value for scaling
-    const maxValue = 7 // Fixed max value to match the image scale
-    const minValue = 0
+    const maxValue = Math.max(...values)
+    const minValue = Math.min(...values)
 
     // Chart dimensions
     const chartWidth = canvas.width - 40
@@ -56,8 +64,8 @@ export function LineChart() {
     ctx.lineWidth = 2
     ctx.beginPath()
 
-    data.forEach((value, index) => {
-      const x = padding + (index / (data.length - 1)) * chartWidth
+    values.forEach((value, index) => {
+      const x = padding + (index / (values.length - 1)) * chartWidth
       const y = padding + chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight
 
       if (index === 0) {
@@ -70,8 +78,8 @@ export function LineChart() {
     ctx.stroke()
 
     // Draw data points and labels
-    data.forEach((value, index) => {
-      const x = padding + (index / (data.length - 1)) * chartWidth
+    values.forEach((value, index) => {
+      const x = padding + (index / (values.length - 1)) * chartWidth
       const y = padding + chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight
 
       // Draw point
@@ -86,7 +94,7 @@ export function LineChart() {
       ctx.textAlign = "center"
       ctx.fillText(labels[index], x, padding + chartHeight + 15)
     })
-  }, [])
+  }, [data])
 
   return <canvas ref={canvasRef} className="w-full h-full" />
 }

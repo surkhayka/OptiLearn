@@ -14,44 +14,42 @@ interface Task {
 }
 
 export default function MainMenu() {
-  const [tasks, setTasks] = useState<Task[]>(() => {
-    if (typeof window !== 'undefined') {
-      const savedTasks = localStorage.getItem('tasks')
-      return savedTasks ? JSON.parse(savedTasks) : [
-        { id: "task1", label: "ENGG1340 Module 7", completed: true },
-        { id: "task2", label: "MATH1851 Problem Set 3", completed: false },
-        { id: "task3", label: "MATH1853 Assignment 3", completed: false },
-      ]
-    }
-    return []
-  })
-
+  const [tasks, setTasks] = useState<Task[]>([])
   const [newTask, setNewTask] = useState("")
 
   useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks))
+    if (typeof window === "undefined") return
+    const saved = localStorage.getItem("tasks")
+    if (saved) setTasks(JSON.parse(saved))
+    else {
+      setTasks([
+        { id: "task1", label: "ENGG1340 Module 7", completed: true },
+        { id: "task2", label: "MATH1851 Problem Set 3", completed: false },
+        { id: "task3", label: "MATH1853 Assignment 3", completed: false },
+      ])
+    }
+  }, [])
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("tasks", JSON.stringify(tasks))
+    }
   }, [tasks])
 
   const toggleTask = (taskId: string) => {
-    setTasks(tasks.map((task) => (task.id === taskId ? { ...task, completed: !task.completed } : task)))
+    setTasks(tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t))
   }
 
   const addTask = (e: React.FormEvent) => {
     e.preventDefault()
-    if (newTask.trim()) {
-      const task = {
-        id: `task${Date.now()}`,
-        label: newTask,
-        completed: false
-      }
-      setTasks([...tasks, task])
-      setNewTask("")
-    }
+    if (!newTask.trim()) return
+    const task: Task = { id: `task${Date.now()}`, label: newTask.trim(), completed: false }
+    setTasks([...tasks, task])
+    setNewTask("")
   }
 
-  // Function to delete a task
   const handleDeleteTask = (taskId: string) => {
-    setTasks(tasks.filter((task) => task.id !== taskId))
+    setTasks(tasks.filter(t => t.id !== taskId))
   }
 
   return (
@@ -60,7 +58,7 @@ export default function MainMenu() {
       <Card className="bg-[#404457] border-0 shadow-none rounded-3xl p-6 md:col-span-2">
         <h2 className="text-2xl font-medium mb-4">Trend</h2>
         <div className="h-40">
-          <LineChart />
+          <LineChart data={[]} />
         </div>
       </Card>
 
@@ -80,13 +78,13 @@ export default function MainMenu() {
             type="text"
             placeholder="Add a new task..."
             value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
+            onChange={e => setNewTask(e.target.value)}
             className="bg-[#2c2e39] border-[#525a81] text-white"
           />
           <Button type="submit" className="bg-[#525a81] hover:bg-[#404457]">Add</Button>
         </form>
         <div className="space-y-3 max-h-[200px] overflow-y-auto">
-          {tasks.map((task) => (
+          {tasks.map(task => (
             <div key={task.id} className="flex items-center justify-between w-full space-x-3">
               <div className="flex items-center space-x-3 flex-grow">
                 <Checkbox
@@ -95,19 +93,9 @@ export default function MainMenu() {
                   onCheckedChange={() => toggleTask(task.id)}
                   className="border-[#525a81] data-[state=checked]:bg-[#525a81] data-[state=checked]:border-[#525a81]"
                 />
-                <label
-                  htmlFor={task.id}
-                  className={`text-base ${task.completed ? "line-through text-gray-400" : ""}`}
-                >
-                  {task.label}
-                </label>
+                <label htmlFor={task.id} className={`text-base ${task.completed ? "line-through text-gray-400" : ""}`}>{task.label}</label>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="p-0 h-6 w-6 text-gray-400 hover:text-white hover:bg-red-500/20"
-                onClick={() => handleDeleteTask(task.id)}
-              >
+              <Button variant="ghost" size="sm" className="p-0 h-6 w-6 text-gray-400 hover:text-white hover:bg-red-500/20" onClick={() => handleDeleteTask(task.id)}>
                 <X className="h-4 w-4" />
               </Button>
             </div>

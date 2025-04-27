@@ -14,6 +14,12 @@ interface StudyData {
   focusDuration: number
 }
 
+interface SessionHistoryEntry {
+  date: string
+  rate: number | null
+  tiredness: number | null
+}
+
 export default function Analytics() {
   const [timeRange, setTimeRange] = useState<"daily" | "weekly" | "monthly">("weekly")
   const [studyData, setStudyData] = useState<StudyData[]>(() => {
@@ -24,9 +30,36 @@ export default function Analytics() {
     return []
   })
 
+  const [sessionHistory, setSessionHistory] = useState<SessionHistoryEntry[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('sessionHistory')
+      return saved ? JSON.parse(saved) : []
+    }
+    return []
+  })
+
   useEffect(() => {
     localStorage.setItem('studyData', JSON.stringify(studyData))
   }, [studyData])
+
+  useEffect(() => {
+    function handleStorage(e: StorageEvent) {
+      if (e.key === 'sessionHistory') {
+        setSessionHistory(e.newValue ? JSON.parse(e.newValue) : [])
+      }
+    }
+    window.addEventListener('storage', handleStorage)
+    return () => window.removeEventListener('storage', handleStorage)
+  }, [])
+
+  useEffect(() => {
+    function onSessionHistoryUpdated() {
+      const saved = localStorage.getItem('sessionHistory')
+      setSessionHistory(saved ? JSON.parse(saved) : [])
+    }
+    window.addEventListener('sessionHistoryUpdated', onSessionHistoryUpdated)
+    return () => window.removeEventListener('sessionHistoryUpdated', onSessionHistoryUpdated)
+  }, [])
 
   function generateMockData(): StudyData[] {
     const data: StudyData[] = []
@@ -210,6 +243,26 @@ export default function Analytics() {
             </div>
             <span>More</span>
           </div>
+        </Card>
+      </div>
+
+      <div className="mt-8">
+        <Card className="bg-[#404457] border-none rounded-3xl p-8">
+          <div className="flex items-center gap-2 mb-6">
+            <Clock className="h-6 w-6" />
+            <h2 className="text-xl font-medium">Past Sessions</h2>
+          </div>
+          <ul className="space-y-2 text-sm">
+            {sessionHistory.length === 0 ? (
+              <li>No past sessions</li>
+            ) : (
+              sessionHistory.map((s, i) => (
+                <li key={i}>
+                  {new Date(s.date).toLocaleString()}: Concentration {s.rate?.toFixed(0)}%, Tiredness {s.tiredness?.toFixed(0)}%
+                </li>
+              ))
+            )}
+          </ul>
         </Card>
       </div>
     </div>
