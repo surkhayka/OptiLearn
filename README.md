@@ -1,4 +1,4 @@
-# Study Dashboard README
+# OptiLearn README
 
 ## Overview
 
