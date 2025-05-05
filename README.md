@@ -26,7 +26,7 @@ Follow the instructions below to set up and run the application on your local ma
 1. Open a terminal and navigate to the root folder:
 
    ```bash
-   cd "Study Dashboard"
+   cd OptiLearn
    ```
 
 2. Install JavaScript dependencies:
@@ -50,24 +50,24 @@ This will launch the front-end at `http://localhost:3000` by default.
 1. Open a new terminal and navigate to the Python service folder:
 
    ```bash
-   cd "Study Dashboard/app"
+   cd OptiLearn/app
    ```
 
 2. (Optional) Create and activate a virtual environment:
-
+   
    ```bash
    python3 -m venv venv
    source venv/bin/activate   # macOS/Linux
    venv\Scripts\activate    # Windows
    ```
 
-3. Install Python dependencies:
+4. Install Python dependencies:
 
    ```bash
    pip install opencv-python mediapipe numpy cvzone fastapi uvicorn openai
    ```
 
-4. Run the FastAPI server on port 8000 with live reload:
+5. Run the FastAPI server on port 8000 with live reload:
 
    ```bash
    uvicorn concentrationrate:app --reload --port 8000
@@ -79,7 +79,7 @@ You should see Uvicorn start and listen at `http://127.0.0.1:8000`.
 
 ## 3. Deep-Seek Analyzer (Node.js)
 
-1. From the root folder (`Study Dashboard`), run:
+1. From the root folder (`OptiLearn`), run:
 
    ```bash
    node analyzer.js
@@ -92,7 +92,7 @@ This script will connect to the attention tracking service and process focus/dis
 ## 4. Directory Structure
 
 ```
-Study Dashboard/
+OptiLearn/
 ├── app/                 # Python FastAPI attention tracker
 │   ├── concentrationrate.py  # FastAPI app instance
 │   ├── tiredness.py          # Image processing modules
